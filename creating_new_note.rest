@@ -1,0 +1,7 @@
+POST http://localhost:3009/api/notes
+Content-Type: application/json
+
+{
+    "content": "POST pyynto REST clientista",
+    "important": false
+}
