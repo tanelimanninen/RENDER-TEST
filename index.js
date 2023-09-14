@@ -1,6 +1,8 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const Note = require('./models/note')
 
 
 //MIDDLEWARE 1: LOG INFO ABOUT REQUESTS COMING TO THE SERVER
@@ -22,6 +24,7 @@ app.use(express.json())
 app.use(requestLogger)
 app.use(express.static('build'))
 
+
 let notes = [
   {
     id: 1,
@@ -42,28 +45,22 @@ let notes = [
 ]
 
 //ROUTE 1: GET SERVER ROOT
-app.get('/', (req, res) => {
-  res.send('<h1>Hello World!</h1>')
+app.get('/', (request, response) => {
+  response.send('<h1>Hello World!</h1>')
 })
 
 //ROUTE 2: GET JSON DATA ROOT
-app.get('/api/notes', (req, res) => {
-  res.json(notes)
+app.get('/api/notes', (request, response) => {
+  Note.find({}).then(notes => {
+    response.json(notes)
+  })
 })
 
 //ROUTE 3: GET SINGLE JSON DATA OBJECT
 app.get('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  //console.log(id)
-  const note = notes.find(note => note.id === id)
-  //console.log(note)
-
-  if (note) {
-     response.json(note)
-  } else {
-    response.status(404).end()
-  }
-    
+  Note.findById(request.params.id).then(note => {
+    response.json(note)
+  })
 })
 
 //ROUTE 4: DELETE SINGLE JSON DATA OBJECT
@@ -74,12 +71,12 @@ app.delete('/api/notes/:id', (request, response) => {
   response.status(204).end()
 })
 
-const generateId = () => {
+/*const generateId = () => {
   const maxId = notes.length > 0
     ? Math.max(...notes.map(n => n.id))
     : 0
   return maxId + 1
-}
+}*/
 
 //ROUTE 5: ADD NEW DATA
 app.post('/api/notes', (request, response) => {
@@ -92,21 +89,20 @@ app.post('/api/notes', (request, response) => {
     })
   }
 
-  const note = {
+  const note = new Note({
     content: body.content,
     important: body.important || false,
-    id: generateId(),
-  }
+  })
 
-  notes = notes.concat(note)
-
-  response.json(note)
+  note.save().then(savedNote => {
+    response.json(savedNote)
+  })
 })
 
 
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

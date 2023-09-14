@@ -1,7 +1,7 @@
-POST http://localhost:3009/api/notes
+POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "POST pyynto REST clientista",
-    "important": false
+    "content": "toimiihan tämä vielä?",
+    "important": true
 }
