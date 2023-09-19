@@ -22,9 +22,15 @@ const unknownEndpoint = (request, response) => {
 //MIDDLEWARE 3: INFORM USER WHEN ID DOESN'T EXIST
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
+  console.log(error.name)
 
+  //CONDITION 1: IF GIVEN ID CAN'T BE FOUND
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  }
+  //CONDITION 2: IF NEW NOTE VALIDATION HAS ERRORS
+  else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
@@ -75,7 +81,7 @@ app.delete('/api/notes/:id', (request, response, next) => {
 })
 
 //ROUTE 5: ADD NEW DATA
-app.post('/api/notes', (request, response) => {
+app.post('/api/notes', (request, response, next) => {
   const body = request.body
   //console.log(note)
 
@@ -90,21 +96,22 @@ app.post('/api/notes', (request, response) => {
     important: body.important || false,
   })
 
-  note.save().then(savedNote => {
+  note.save()
+  .then(savedNote => {
     response.json(savedNote)
   })
+  .catch(error => next(error))
 })
 
 //ROUTE 6: UPDATE EXISTING DATA
 app.put('/api/notes/:id', (request, response, next) => {
-  const body = request.body
+  const { content, important } = request.body
 
-  const note = {
-    content: body.content,
-    important: body.important,
-  }
-
-  Note.findByIdAndUpdate(request.params.id, note, { new: true })
+  Note.findByIdAndUpdate(
+    request.params.id,
+    { content: important },
+    { new: true, runValidators: true, context: 'query' }
+  )
   .then(updatedNote => {
     response.json(updatedNote)
   })
