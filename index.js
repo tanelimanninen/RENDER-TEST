@@ -58,26 +58,26 @@ app.get('/api/notes', (request, response) => {
 //ROUTE 3: GET SINGLE JSON DATA OBJECT
 app.get('/api/notes/:id', (request, response, next) => {
   Note.findById(request.params.id)
-  .then(note => {
+    .then(note => {
     //CONDITION 1: IF NOTE EXISTS
-    if (note) {
-      response.json(note)
-    } 
-    //CONDITION 2: IF NOTE DOESN'T EXIST
-    else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+      if (note) {
+        response.json(note)
+      }
+      //CONDITION 2: IF NOTE DOESN'T EXIST
+      else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 //ROUTE 4: DELETE SINGLE JSON DATA OBJECT
 app.delete('/api/notes/:id', (request, response, next) => {
   Note.findByIdAndRemove(request.params.id)
-  .then(result => {
-    response.status(204).end()
-  })
-  .catch(error => next(error))
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 //ROUTE 5: ADD NEW DATA
@@ -86,8 +86,8 @@ app.post('/api/notes', (request, response, next) => {
   //console.log(note)
 
   if (!body.content) {
-    return response.status(400).json({ 
-      error: 'content missing' 
+    return response.status(400).json({
+      error: 'content missing'
     })
   }
 
@@ -97,10 +97,10 @@ app.post('/api/notes', (request, response, next) => {
   })
 
   note.save()
-  .then(savedNote => {
-    response.json(savedNote)
-  })
-  .catch(error => next(error))
+    .then(savedNote => {
+      response.json(savedNote)
+    })
+    .catch(error => next(error))
 })
 
 //ROUTE 6: UPDATE EXISTING DATA
@@ -112,10 +112,10 @@ app.put('/api/notes/:id', (request, response, next) => {
     { content, important },
     { new: true, runValidators: true, context: 'query' }
   )
-  .then(updatedNote => {
-    response.json(updatedNote)
-  })
-  .catch(error => next(error))
+    .then(updatedNote => {
+      response.json(updatedNote)
+    })
+    .catch(error => next(error))
 })
 
 

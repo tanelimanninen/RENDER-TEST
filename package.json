@@ -8,7 +8,8 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd ../koodi_demoja/FULLSTACK_DEMOT/part1 && npm run build && cp -r build ../portfolio/RENDER-TEST",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "lint": "eslint ."
   },
   "author": "Taneli Manninen",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "mongoose": "^7.5.1"
   },
   "devDependencies": {
+    "eslint": "^8.49.0",
     "nodemon": "^3.0.1"
   }
 }
