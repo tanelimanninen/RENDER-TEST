@@ -2,30 +2,26 @@ const notesRouter = require('express').Router()
 const Note = require('../models/note')
 
 //ROUTE 1: GET ALL DATA
-notesRouter.get('/', (request, response) => {
-  Note.find({}).then(notes => {
-    response.json(notes)
-  })
+notesRouter.get('/', async (request, response) => {
+  const notes = await Note.find({})
+  response.json(notes)
 })
 
 //ROUTE 2: GET SINGLE DATA OBJECT
-notesRouter.get('/:id', (request, response, next) => {
-  Note.findById(request.params.id)
-    .then(note => {
-      //CONDITION 1: IF NOTE EXISTS
-      if (note) {
-        response.json(note)
-      }
-      //CONDITION 2: IF NOTE DOESN'T EXIST
-      else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => next(error))
+notesRouter.get('/:id', async (request, response, next) => {
+  const note = await Note.findById(request.params.id)
+  //CONDITION 1: IF NOTE EXISTS
+  if (note) {
+    response.json(note)
+  }
+  //CONDITION 2: IF NOTE DOESN'T EXIST
+  else {
+    response.status(404).end()
+  }
 })
 
 //ROUTE 3: ADD NEW DATA
-notesRouter.post('/', (request, response, next) => {
+notesRouter.post('/', async (request, response, next) => {
   const body = request.body
 
   const note = new Note({
@@ -33,20 +29,14 @@ notesRouter.post('/', (request, response, next) => {
     important: body.important || false,
   })
 
-  note.save()
-    .then(savedNote => {
-      response.json(savedNote)
-    })
-    .catch(error => next(error))
+  const savedNote = await note.save()
+  response.json(savedNote)
 })
 
 //ROUTE 4: DELETE SINGLE DATA OBJECT
-notesRouter.delete('/:id', (request, response, next) => {
-  Note.findByIdAndRemove(request.params.id)
-    .then(() => {
-      response.status(204).end()
-    })
-    .catch(error => next(error))
+notesRouter.delete('/:id', async (request, response) => {
+  await Note.findByIdAndRemove(request.params.id)
+  response.status(204).end()
 })
 
 //ROUTE 6: UPDATE EXISTING SINGLE DATA
