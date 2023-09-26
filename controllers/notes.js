@@ -8,7 +8,7 @@ notesRouter.get('/', async (request, response) => {
 })
 
 //ROUTE 2: GET SINGLE DATA OBJECT
-notesRouter.get('/:id', async (request, response, next) => {
+notesRouter.get('/:id', async (request, response) => {
   const note = await Note.findById(request.params.id)
   //CONDITION 1: IF NOTE EXISTS
   if (note) {
@@ -21,7 +21,7 @@ notesRouter.get('/:id', async (request, response, next) => {
 })
 
 //ROUTE 3: ADD NEW DATA
-notesRouter.post('/', async (request, response, next) => {
+notesRouter.post('/', async (request, response) => {
   const body = request.body
 
   const note = new Note({
