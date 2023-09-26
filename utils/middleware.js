@@ -9,7 +9,7 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-//MIDDLEWARE 2: SHOW MESSAGE IF ERROR HAPPENS
+//MIDDLEWARE 2: SHOW MESSAGE IF TRYING TO GET WRONG ID
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }

@@ -21,7 +21,7 @@ notesRouter.get('/:id', async (request, response) => {
 })
 
 //ROUTE 3: ADD NEW DATA
-notesRouter.post('/', async (request, response) => {
+notesRouter.post('/', async (request, response, next) => {
   const body = request.body
 
   const note = new Note({
@@ -29,8 +29,12 @@ notesRouter.post('/', async (request, response) => {
     important: body.important || false,
   })
 
-  const savedNote = await note.save()
-  response.json(savedNote)
+  try {
+    const savedNote = await note.save()
+    response.status(201).json(savedNote)
+  } catch(exception) {
+    next(exception)
+  }
 })
 
 //ROUTE 4: DELETE SINGLE DATA OBJECT

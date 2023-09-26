@@ -13,8 +13,10 @@ const initialNotes = [
 
 const nonExistingId = async () => {
   const note = new Note({ content: 'willremovethissoon' })
-  await note.save()
-  await note.remove()
+  //await note.save()
+  //await note.remove()
+  const savedNote = await note.save()
+  await Note.deleteOne({ _id: savedNote._id })
 
   return note._id.toString()
 }
