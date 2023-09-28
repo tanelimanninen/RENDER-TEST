@@ -1,7 +1,8 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZyZWRyaWtzb24iLCJpZCI6IjY1MTUzMjU3NjQ1ZDA0ODI2Yjg5MmYxYyIsImlhdCI6MTY5NTg5MDQyOX0.IB6xb3dAqvdskNfyUOjSWbv6aUT4H0rujX_SX3fXv-E
 
 {
-    "content": "öö?",
+    "content": "REST API note with authorization",
     "important": false
 }
